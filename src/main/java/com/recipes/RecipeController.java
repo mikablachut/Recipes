@@ -1,24 +1,31 @@
 package com.recipes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 public class RecipeController {
-    Recipe firstRecipe = new Recipe();
+    private ConcurrentHashMap<RecipeID, Recipe> listOfRecipes = new ConcurrentHashMap<>();
 
-    @GetMapping("/api/recipe")
-    public Recipe returnRecipe() {
-        return firstRecipe;
+    @GetMapping("/api/recipe/{id}")
+    public Recipe returnRecipe(@PathVariable int id) {
+        RecipeID recipeID = new RecipeID(id);
+        if (!listOfRecipes.containsKey(recipeID)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else {
+            return listOfRecipes.get(recipeID);
+        }
     }
 
-    @PostMapping("/api/recipe")
-    public void addRecipe(@RequestBody Recipe recipe) {
-        firstRecipe.setName(recipe.getName());
-        firstRecipe.setDescription(recipe.getDescription());
-        firstRecipe.setIngredients(recipe.getIngredients());
-        firstRecipe.setDirections(recipe.getDirections());
+    @PostMapping("/api/recipe/new")
+    public RecipeID addRecipe(@RequestBody Recipe recipe) {
+        Recipe userRecipe = new Recipe(recipe.getName(), recipe.getDescription(), recipe.getIngredients(),
+                recipe.getDirections());
+        RecipeID recipeID = new RecipeID(listOfRecipes.size() + 1);
+        listOfRecipes.put(recipeID, userRecipe);
+        return recipeID;
     }
 }
