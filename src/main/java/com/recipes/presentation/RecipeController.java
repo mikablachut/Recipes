@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @RestController
 public class RecipeController {
@@ -30,8 +31,9 @@ public class RecipeController {
     @PostMapping("/api/recipe/new")
     public ResponseEntity<String> addRecipe(@Valid @RequestBody Recipe recipe) {
         try {
-            Recipe createdRecipe = recipeService.save(new Recipe(recipe.getId(), recipe.getName(), recipe.getDescription(),
-                    recipe.getIngredients(), recipe.getDirections()));
+            Recipe createdRecipe = recipeService.save(new Recipe(recipe.getId(), recipe.getName(), recipe.getCategory(),
+                                                      LocalDateTime.now(), recipe.getDescription(),
+                                                      recipe.getIngredients(), recipe.getDirections()));
             return new ResponseEntity<>("{\"id\": " + createdRecipe.getId() + "}", HttpStatus.OK);
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -44,6 +46,27 @@ public class RecipeController {
         try {
             recipeService.deleteRecipeById(id);
         } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/api/recipe/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateRecipe(@PathVariable long id, @Valid @RequestBody Recipe recipe) {
+        if (recipeService.existsById(id)) {
+            try {
+                Recipe recipeToUpdate = recipeService.findRecipeById(id);
+                recipeToUpdate.setName(recipe.getName());
+                recipeToUpdate.setCategory(recipe.getCategory());
+                recipeToUpdate.setDate(LocalDateTime.now());
+                recipeToUpdate.setDescription(recipe.getDescription());
+                recipeToUpdate.setIngredients(recipe.getIngredients());
+                recipeToUpdate.setDirections(recipe.getDirections());
+                recipeService.save(recipeToUpdate);
+            } catch (RuntimeException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
