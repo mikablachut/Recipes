@@ -12,5 +12,6 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
     Recipe save(Recipe toSave);
     void deleteById(Long id);
     boolean existsById(Long id);
-    List<Recipe> findByCategoryOrName(String categoryOrName);
+    List<Recipe> findByCategoryIgnoreCaseOrderByDateDesc(String category);
+    List<Recipe> findByNameIgnoreCaseContainsOrderByDateDesc(String name);
 }

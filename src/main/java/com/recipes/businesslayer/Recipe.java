@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -31,9 +30,8 @@ public class Recipe {
     @NotBlank
     private String category;
 
-    @CreationTimestamp
     @Column
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @Column
     @NotBlank
@@ -48,4 +46,5 @@ public class Recipe {
     @NotEmpty
     @Size(min = 1)
     private String[] directions;
+
 }

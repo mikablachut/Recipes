@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class RecipeController {
@@ -25,6 +27,22 @@ public class RecipeController {
             }
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/api/recipe/search/")
+    public List<Recipe> searchRecipe(@RequestParam(required = false) String category,
+                                     @RequestParam(required = false) String name) {
+
+        Optional<String> nameCheck = Optional.ofNullable(name);
+        Optional<String> categoryCheck = Optional.ofNullable(category);
+
+        if ((nameCheck.isEmpty() && categoryCheck.isEmpty())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else if (nameCheck.isPresent()) {
+            return recipeService.findByNameIgnoreCaseContainsOrderByDateDesc(name);
+        } else {
+            return recipeService.findByCategoryIgnoreCaseOrderByDateDesc(category);
         }
     }
 
