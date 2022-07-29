@@ -32,7 +32,6 @@ public class Recipe {
 
     @Column
     private LocalDateTime date = LocalDateTime.now();
-
     @Column
     @NotBlank
     private String description;
@@ -47,4 +46,7 @@ public class Recipe {
     @Size(min = 1)
     private String[] directions;
 
+    @Column
+    @JsonIgnore
+    private String author;
 }
