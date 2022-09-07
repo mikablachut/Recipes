@@ -1,5 +1,8 @@
 # Recipes
 * [Description](#description)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Application view](#application-view)
 
 ## 1. Description
 
@@ -9,6 +12,19 @@ A multi-user web application that allows storing, retrieving, updating and delet
 </details>
 
 ## 2. Technologies
+
+<ul>
+  <li>Java 17</li>
+  <li>Spring Boot</li>
+  <li>Spring Boot Security</li>
+  <li>Spring Data</li>
+  <li>Hibernate</li>
+  <li>H2</li>
+  <li>Gradle</li>
+  <li>JUnit</li>
+  <li>REST API</li>
+  <li>Project Lombok</li>
+</ul>
 
 ## 3. Setup
 
