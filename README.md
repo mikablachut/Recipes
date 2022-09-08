@@ -52,9 +52,11 @@ https://github.com/dominikablachut/Recipes.git
 cd Recipes
 ```
 
+Now you can run the app using Gradle:
 
-
-
+```
+gradle -Pspring.datasource.url=jdbc:h2:file:./recipes_db –Pspring.datasource.username=test -Pspring.datasource.password=test1234 bootRun
+```
 
 ## Endpoints
 
