@@ -39,12 +39,14 @@ public class Recipe {
     @NotEmpty
     @Size(min = 1)
     @ElementCollection
+    @OrderColumn
     private String[] ingredients;
 
     @Column
     @NotEmpty
     @Size(min = 1)
     @ElementCollection
+    @OrderColumn
     private String[] directions;
 
     @Column
