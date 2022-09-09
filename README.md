@@ -39,7 +39,7 @@ The idea for project cames from Java Beckend Developer track in [JetBrains Acade
 
 ## Setup
 
-Make sure you have [git](https://git-scm.com/) installed. The application uses H2 as the database by default. It is required to provide database connection URL and database user conditionals for an application to run.
+Make sure you have [git](https://git-scm.com/) installed. The application uses H2 as the database by default.
 
 ### Gradle
 
@@ -55,7 +55,14 @@ cd Recipes
 Now you can run the app using Gradle:
 
 ```
-gradle -Pspring.datasource.url=jdbc:h2:file:./recipes_db –Pspring.datasource.username=test -Pspring.datasource.password=test1234 bootRun
+gradle bootRun
+```
+
+We can also run the application using traditional way using ```java -jar``` command but for that, we need to generate jar of out spring boot application.  Let see those steps for Gradle:
+
+```
+gradle build
+java -jar .\build\libs\recipes-2.7.2.jar
 ```
 
 ## Endpoints
