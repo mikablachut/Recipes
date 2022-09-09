@@ -1,18 +1,18 @@
 package com.recipes.security;
 
-import com.recipes.businesslayer.User;
+import com.recipes.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 
-public class UserDetailsImpl implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private final String username;
     private final String password;
     private final List<GrantedAuthority> rolesAndAuthorities;
 
-    public UserDetailsImpl(User user) {
+    public UserDetails(User user) {
         username = user.getEmail();
         password = user.getPassword();
         rolesAndAuthorities = List.of(new SimpleGrantedAuthority(user.getRolesAndAuthorities()));

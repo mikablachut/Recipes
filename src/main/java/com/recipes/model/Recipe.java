@@ -1,22 +1,21 @@
-package com.recipes.businesslayer;
+package com.recipes.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "recipes")
 public class Recipe {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
@@ -39,11 +38,15 @@ public class Recipe {
     @Column
     @NotEmpty
     @Size(min = 1)
+    @ElementCollection
+    @OrderColumn
     private String[] ingredients;
 
     @Column
     @NotEmpty
     @Size(min = 1)
+    @ElementCollection
+    @OrderColumn
     private String[] directions;
 
     @Column

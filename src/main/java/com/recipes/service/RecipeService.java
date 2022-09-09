@@ -1,6 +1,7 @@
-package com.recipes.businesslayer;
+package com.recipes.service;
 
-import com.recipes.persistence.RecipeRepository;
+import com.recipes.model.Recipe;
+import com.recipes.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
