@@ -1,7 +1,7 @@
-package com.recipes.presentation;
+package com.recipes.controller;
 
-import com.recipes.businesslayer.User;
-import com.recipes.businesslayer.UserService;
+import com.recipes.model.User;
+import com.recipes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.sql.DataSource;
 import javax.validation.Valid;
 
@@ -26,7 +25,7 @@ public class RegistrationController {
 
     @PostMapping("/api/register")
     @ResponseStatus(HttpStatus.OK)
-    public void UserRegister(@Valid @RequestBody User user) {
+    public void registerNewUser(@Valid @RequestBody User user) {
         if(userService.findUserByUsername(user.getEmail()) == null) {
             try {
                 User createdUser = new User();

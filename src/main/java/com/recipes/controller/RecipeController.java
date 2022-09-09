@@ -1,7 +1,7 @@
-package com.recipes.presentation;
+package com.recipes.controller;
 
-import com.recipes.businesslayer.Recipe;
-import com.recipes.businesslayer.RecipeService;
+import com.recipes.model.Recipe;
+import com.recipes.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +67,7 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRecipe(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id) {
         if (recipeService.existsById(id)) {
-            if (recipeService.findRecipeById(id).getAuthor() == userDetails.getUsername()) {
+            if (recipeService.findRecipeById(id).getAuthor().equals(userDetails.getUsername())) {
                 try {
                     recipeService.deleteRecipeById(id);
                 } catch (RuntimeException e) {
@@ -86,7 +86,7 @@ public class RecipeController {
     public void updateRecipe(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id,
                              @Valid @RequestBody Recipe recipe) {
         if (recipeService.existsById(id)) {
-            if (recipeService.findRecipeById(id).getAuthor() == (userDetails.getUsername())) {
+            if (recipeService.findRecipeById(id).getAuthor().equals((userDetails.getUsername()))) {
                 try {
                     Recipe recipeToUpdate = recipeService.findRecipeById(id);
                     recipeToUpdate.setName(recipe.getName());
