@@ -48,7 +48,7 @@ Make sure you have [git](https://git-scm.com/) installed. The application uses H
 Clone repository and enter its folder:
 
 ```
-https://github.com/dominikablachut/Recipes.git
+git clone https://github.com/dominikablachut/Recipes.git
 cd Recipes
 ```
 
