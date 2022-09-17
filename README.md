@@ -18,7 +18,7 @@
   
 A multi-user web application that allows storing, retrieving, updating and deleting recipes. Each user can search for recipes by category or name. The serivce          supports registration process and allows users (after logon) to add their own recipes and to update, delete and search this recipes by ID.
 
-The idea for project cames from [JetBrains Academy](https://www.jetbrains.com/academy/) Java Beckend Developer track.
+The idea for project comes from [JetBrains Academy](https://www.jetbrains.com/academy/) Java Beckend Developer track.
   
 </details>
 
