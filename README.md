@@ -13,12 +13,12 @@
 ## Description
 
 <details>
-<summary>Click here to see general information about <b>Project</b>!</summary>
+<summary>Click here to see general information about the <b>Project</b>!</summary>
   
   
 A multi-user web application that allows storing, retrieving, updating and deleting recipes. Each user can search for recipes by category or name. The serivce          supports registration process and allows users (after logon) to add their own recipes and to update, delete and search this recipes by ID.
 
-The idea for project cames from Java Beckend Developer track in [JetBrains Academy](https://www.jetbrains.com/academy/).
+The idea for project cames from [JetBrains Academy](https://www.jetbrains.com/academy/) Java Beckend Developer track.
   
 </details>
 
@@ -58,7 +58,8 @@ Now you can run the app using Gradle:
 gradle bootRun
 ```
 
-We can also run the application using traditional way using ```java -jar``` command but for that, we need to generate jar of out spring boot application.  Let see those steps for Gradle:
+Application can also be started using ```java -jar``` command but for that, you need to generate jar file.
+Steps for this scenario:
 
 ```
 gradle build
@@ -67,11 +68,11 @@ java -jar .\build\libs\recipes-2.7.2.jar
 
 ## Endpoints
 
-When you start the application a H2 database containing initial tables will be automaticly created. You can use [Postman](https://www.postman.com) or any similar program for testing existing endpoints.
+When you start the application a H2 database containing initial tables will be automaticly created. You can use [Postman](https://www.postman.com) or any similar program for testing the APIs.
 
 ### Register User Endpoint
 
-Endpoint receives a JSON object with two fields: email (string), and password (string). If a user with a specified email does not exist, the program saves (registers) the user in a database and responds with 200 (Ok). If a user is already in the database, respond with the 400 (Bad Request) status code. Both fields are required and must be valid: email should contain @ and . symbols, password should contain at least 8 characters and shouldn't be blank. If the fields do not meet these restrictions, the service should respond with 400 (Bad Request). 
+Endpoint receives a JSON object with two fields: email (string), and password (string). If a user with a specified email does not exist, the program saves (registers) the user in a database and responds with 200 (Ok). If a user is already stored in the database, the application responds with the 400 (Bad Request) status code. Both fields are required and must be valid: email should contain '@' and '.' symbols, password should contain at least 8 characters and shouldn't be blank. If the fields do not meet these restrictions, the service should respond with 400 (Bad Request). 
 
 POST method
 
@@ -93,7 +94,7 @@ Request body:
 
 ### Add Recipe Endpoint
 
-Endpoint receives a recipe as a JSON object and returns a JSON object with one id field. This is a uniquely generated number by which we can identify and retrieve a recipe later. The application accept only valid recipes – all fields are obligatory, name and description shouldn't be blank, and JSON arrays should contain at least one item. If a recipe doesn't meet these requirements, the service should respond with the 400 (Bad Request) status code. Only a register user can add a recipe. If a user is not register, but he try to carry out the action mentioned above, the service should respond with the 401 (Unauthorized) status code.
+Endpoint receives a recipe as a JSON object and returns a JSON object with an ID field. This is a uniquely generated number by which we can identify and retrieve a recipe later. The application accept only valid recipes – all fields are obligatory, name and description shouldn't be blank, and JSON arrays should contain at least one item. If a recipe doesn't meet these requirements, the service should respond with the 400 (Bad Request) status code. Only a register user can add a recipe. If a user is not register, but he try to carry out the action mentioned above, the service should respond with the 401 (Unauthorized) status code.
 
 POST method
 
@@ -144,7 +145,7 @@ Request body:
 
 ### Update Recipe Endpoint
 
-Endpoint receives a recipe as a JSON object and updates a recipe with a specified id. The server should return the 204 (No Content) status code. If a recipe with a specified id does not exist, the server should return 404 (Not found). The server should respond with 400 (Bad Request) if a recipe doesn't follow the restrictions indicated above in section [Add Recipe Endpoint](#add-recipe-endpoint). Only an author of a recipe can update it. If a user is not the author of a recipe, but he try to carry out the action mentioned above, the service should respond with the 403 (Forbidden) status code.
+Endpoint receives a recipe as a JSON object and updates a recipe with a specified ID. The server should return the 204 (No Content) status code. If a recipe with a specified ID does not exist, the server should return 404 (Not found). The server should respond with 400 (Bad Request) if a recipe doesn't follow the restrictions indicated above in section [Add Recipe Endpoint](#add-recipe-endpoint). Only an author of a recipe can update it. If a user is not the author of a recipe, but he try to carry out the action mentioned above, the service should respond with the 403 (Forbidden) status code.
 
 PUT method
 
@@ -169,7 +170,7 @@ Request body:
 
 ### Get Recipe Endpoint
 
-Endpoint  returns a recipe with a specified id as a JSON object (where {id} is the id of a recipe). The server should respond with the 200 (Ok) status code. If a recipe with a specified id does not exist, the server should respond with 404 (Not found). Only a register user can search a recipe. If a user is not register, but he try to carry out the action mentioned above, the service should respond with the 401 (Unauthorized) status code.
+Endpoint returns a recipe with a specified ID as a JSON object (where {id} is the ID of a recipe). The server should respond with the 200 (Ok) status code. If a recipe with a specified ID does not exist, the server should respond with 404 (Not found). Only a register user can search a recipe. If a user is not register, but he try to carry out the action mentioned above, the service should respond with the 401 (Unauthorized) status code.
 
 GET method
 
