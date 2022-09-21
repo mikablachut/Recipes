@@ -1,6 +1,5 @@
 package com.recipes;
 
-import com.recipes.repository.UserRepository;
 import com.recipes.security.UserDetailsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

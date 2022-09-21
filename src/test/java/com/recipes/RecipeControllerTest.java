@@ -16,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,8 +27,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource("/application-test.properties")
@@ -217,6 +218,27 @@ public class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Cook_Programmer@somewhere.com", password = "password1234")
+    public void addInvalidRecipeHttpRequestEmptyResponse() throws Exception {
+        String[] ingredients = new String[]{"1 inch ginger root, minced", "1/2 lemon, juiced",
+                "1/2 teaspoon manuka honey"};
+        String[] directions = new String[]{"Place all ingredients in a mug and fill with" +
+                " warm water (not too hot so you keep the beneficial honey compounds in tact)", "Steep for 5-10 minutes",
+                "Drink and enjoy"};
+        Recipe recipe = new Recipe(null, "beverage", LocalDateTime.now(),
+                "Ginger tea is a warming drink for cool weather, ...", ingredients, directions,
+                "CamelCaseRecipe@somewhere.com");
+
+        this.mockMvc.perform(post("/api/recipe/new").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(recipe)))
+                .andExpect(status().isBadRequest());
+
+        Recipe verifyRecipe = recipeRepository.findRecipeById(1L);
+
+        assertNull(verifyRecipe);
+    }
+
+    @Test
     public void addRecipeHttpRequestWithoutAuthentication() throws Exception {
         String[] ingredients = new String[]{"1 inch ginger root, minced", "1/2 lemon, juiced",
                 "1/2 teaspoon manuka honey"};
@@ -232,10 +254,132 @@ public class RecipeControllerTest {
                 .andExpect(status().is(401));
     }
 
+    @Test
+    @WithMockUser(username = "Cook_Programmer@somewhere.com", password = "password1234")
+    public void deleteRecipeHttpRequest() throws Exception {
+        Recipe recipe = recipeRepository.findRecipeById(2L);
 
+        assertNotNull(recipe);
 
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/recipe/{id}", 2))
+                .andExpect(status().isNoContent());
 
+        Recipe verifyRecipe = recipeRepository.findRecipeById(2L);
 
+        assertNull(verifyRecipe);
+    }
+
+    @Test
+    @WithMockUser(username = "Cook_Programmer@somewhere.com", password = "password1234")
+    public void deleteRecipeHttpRequestInvalidIdNotFoundResponse() throws Exception {
+        Recipe recipe = recipeRepository.findRecipeById(1L);
+
+        assertNull(recipe);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/recipe/{id}", 1))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Sql("/insertUserData.sql")
+    @WithMockUser(username = "CamelCaseRecipe@somewhere.com", password = "C00k1234es")
+    public void deleteRecipeHttpRequestInvalidUserForbiddenResponse() throws Exception {
+        Recipe recipe = recipeRepository.findRecipeById(2L);
+
+        assertNotNull(recipe);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/recipe/{id}", 2))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteRecipeHttpRequestWithoutAuthentication() throws Exception {
+        Recipe recipe = recipeRepository.findRecipeById(2L);
+
+        assertNotNull(recipe);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/recipe/{id}", 2))
+                .andExpect(status().is(401));
+
+    }
+
+    @Test
+    @WithMockUser(username = "Cook_Programmer@somewhere.com", password = "password1234")
+    public void updateRecipeHttpRequest() throws Exception {
+        Recipe recipeToUpdate = recipeRepository.findRecipeById(2L);
+        assertEquals("Fresh Mint Tea", recipeToUpdate.getName());
+
+        Recipe recipe = new Recipe("Mint Tea", recipeToUpdate.getCategory(), LocalDateTime.now(),
+                recipeToUpdate.getDescription(), recipeToUpdate.getIngredients(), recipeToUpdate.getDirections(),
+                recipeToUpdate.getAuthor());
+
+        this.mockMvc.perform(put("/api/recipe/{id}",2).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recipe)))
+                .andExpect(status().isNoContent());
+
+        Recipe verifyRecipe = recipeRepository.findRecipeById(2L);
+        assertEquals("Mint Tea", verifyRecipe.getName());
+    }
+
+    @Test
+    @WithMockUser(username = "Cook_Programmer@somewhere.com", password = "password1234")
+    public void updateRecipeHttpRequestInvalidIdNotFoundResponse() throws Exception {
+        Recipe recipeToUpdate = recipeRepository.findRecipeById(2L);
+        assertNotNull(recipeToUpdate);
+
+        Recipe recipe = new Recipe("Mint Tea", recipeToUpdate.getCategory(), LocalDateTime.now(),
+                recipeToUpdate.getDescription(), recipeToUpdate.getIngredients(), recipeToUpdate.getDirections(),
+                recipeToUpdate.getAuthor());
+
+        this.mockMvc.perform(put("/api/recipe/{id}",1).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recipe)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Sql("/insertUserData.sql")
+    @WithMockUser(username = "CamelCaseRecipe@somewhere.com", password = "C00k1234es")
+    public void updateRecipeHttpRequestInvalidUserForbiddenResponse() throws Exception {
+        Recipe recipeToUpdate = recipeRepository.findRecipeById(2L);
+        assertNotNull(recipeToUpdate);
+
+        Recipe recipe = new Recipe("Mint Tea", recipeToUpdate.getCategory(), LocalDateTime.now(),
+                recipeToUpdate.getDescription(), recipeToUpdate.getIngredients(), recipeToUpdate.getDirections(),
+                recipeToUpdate.getAuthor());
+
+        this.mockMvc.perform(put("/api/recipe/{id}",2).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recipe)))
+                        .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "Cook_Programmer@somewhere.com", password = "password1234")
+    public void updateRecipeHttpRequestInvalidRecipeBadRequestResponse() throws Exception {
+        Recipe recipeToUpdate = recipeRepository.findRecipeById(2L);
+        assertEquals("Fresh Mint Tea", recipeToUpdate.getName());
+
+        Recipe recipe = new Recipe(null, recipeToUpdate.getCategory(), LocalDateTime.now(),
+                recipeToUpdate.getDescription(), recipeToUpdate.getIngredients(), recipeToUpdate.getDirections(),
+                recipeToUpdate.getAuthor());
+
+        this.mockMvc.perform(put("/api/recipe/{id}", 2).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recipe)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateRecipeHttpRequestWithoutAuthentication() throws Exception {
+        Recipe recipeToUpdate = recipeRepository.findRecipeById(2L);
+        assertEquals("Fresh Mint Tea", recipeToUpdate.getName());
+
+        Recipe recipe = new Recipe(null, recipeToUpdate.getCategory(), LocalDateTime.now(),
+                recipeToUpdate.getDescription(), recipeToUpdate.getIngredients(), recipeToUpdate.getDirections(),
+                recipeToUpdate.getAuthor());
+
+        this.mockMvc.perform(put("/api/recipe/{id}", 2).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recipe)))
+                .andExpect(status().is(401));
+    }
     @AfterEach
     public void setupAfterTransaction() {
         jdbc.execute(sqlDeleteRecipeDirections);
@@ -243,16 +387,4 @@ public class RecipeControllerTest {
         jdbc.execute(sqlDeleteRecipes);
         jdbc.execute(sqlDeleteUser);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
