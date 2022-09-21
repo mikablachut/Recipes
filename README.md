@@ -33,6 +33,7 @@ The idea for project comes from [JetBrains Academy](https://www.jetbrains.com/ac
   <li>H2</li>
   <li>Gradle</li>
   <li>JUnit</li>
+  <li>Mockito</li>
   <li>REST API</li>
   <li>Project Lombok</li>
 </ul>
