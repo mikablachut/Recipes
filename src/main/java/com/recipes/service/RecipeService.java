@@ -4,7 +4,6 @@ import com.recipes.model.Recipe;
 import com.recipes.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

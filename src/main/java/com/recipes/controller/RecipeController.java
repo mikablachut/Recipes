@@ -54,7 +54,7 @@ public class RecipeController {
         String name = userDetails.getUsername();
 
         try {
-            Recipe createdRecipe = recipeService.save(new Recipe(recipe.getId(), recipe.getName(),recipe.getCategory(),
+            Recipe createdRecipe = recipeService.save(new Recipe(recipe.getName(),recipe.getCategory(),
                                                       LocalDateTime.now(), recipe.getDescription(),
                                                       recipe.getIngredients(), recipe.getDirections(), name));
             return new ResponseEntity<>("{\"id\": " + createdRecipe.getId() + "}", HttpStatus.OK);

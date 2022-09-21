@@ -1,0 +1,7 @@
+insert into recipes (id,name,category,date,description,author) values (1,'Warming Ginger Tea','beverage','2022-09-19 11:10:33.101901', 'Ginger tea is a warming drink for cool weather', 'CamelCaseRecipe@somewhere.com')
+insert into recipe_ingredients(recipe_id,ingredients,ingredients_order) values (1,'1 inch ginger root, minced',0)
+insert into recipe_ingredients(recipe_id,ingredients,ingredients_order) values (1,'1/2 lemon, juiced',1)
+insert into recipe_ingredients(recipe_id,ingredients,ingredients_order) values (1,'1/2 teaspoon manuka honey',2)
+insert into recipe_directions(recipe_id,directions,directions_order) values (1,'Place all ingredients in a mug and fill with warm water (not too hot so you keep the beneficial honey compounds in tact)',0)
+insert into recipe_directions(recipe_id,directions,directions_order) values (1,'Steep for 5-10 minutes',1)
+insert into recipe_directions(recipe_id,directions,directions_order) values (1,'Drink and enjoy',2)
